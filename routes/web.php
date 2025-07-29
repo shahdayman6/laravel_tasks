@@ -11,3 +11,7 @@ Route::get('/hello',function ()  {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+use App\Http\Controllers\NoteController;
+
+Route::resource('notes', NoteController::class);
