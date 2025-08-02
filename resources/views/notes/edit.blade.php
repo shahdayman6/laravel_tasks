@@ -18,7 +18,7 @@
                 <label for="inputTitle" class="form-label"><strong>Title:</strong></label>
                 <input 
                     type="text" 
-                    Title="Title" 
+                    name="Title" 
                     value="{{ $note->title }}"
                     class="form-control @error('Title') is-invalid @enderror" 
                     id="inputTitle" 
@@ -33,7 +33,7 @@
                 <textarea 
                     class="form-control @error('content') is-invalid @enderror" 
                     style="height:150px" 
-                    Title="content" 
+                    name="content" 
                     id="inputcontent" 
                     placeholder="content">{{ $note->content }}</textarea>
                 @error('content')
