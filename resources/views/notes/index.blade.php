@@ -14,6 +14,11 @@
             <a class="btn btn-success btn-sm" href="{{ route('notes.create') }}"><i class="fa fa-plus"></i> Create New Note</a>
         </div>
 
+       <form action="{{ route('notes.index') }}" method="GET">
+    <input type="text" name="search" placeholder="search" value="{{ request('search') }}">
+    <button type="submit">search</button>
+        </form>
+
         <table class="table table-bordered table-striped mt-4">
             <thead>
                 <tr>
@@ -23,7 +28,6 @@
                     <th width="250px">Action</th>
                 </tr>
             </thead>
-
             <tbody>
                 @forelse ($notes as $note)
                     <tr>
@@ -49,6 +53,12 @@
         </table>
         
         {!! $notes->links() !!}
+
+       <div style="width: 100%; text-align: right; margin-top: 10px;">
+    <a href="{{ route('notes.trash') }}">
+        <img src="https://cdn-icons-png.flaticon.com/512/3096/3096673.png" width="30" alt="trash">
+    </a>
+       </div>
 
     </div>
 </div>  

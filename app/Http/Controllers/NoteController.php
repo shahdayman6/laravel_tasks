@@ -15,13 +15,21 @@ class NoteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
-    {
-        $notes = Note::latest()->paginate(5);
-          
-        return view('notes.index', compact('notes'))
-                    ->with('i', (request()->input('page', 1) - 1) * 5);
-    }
+   public function index(Request $request): View
+{
+    $search = $request->input('search');
+
+    $notes = Note::when($search, function ($query, $search) {
+        return $query->where('title', 'like', "%{$search}%")
+                     ->orWhere('content', 'like', "%{$search}%");
+    })
+    ->latest()
+    ->paginate(5)
+    ->withQueryString();
+
+    return view('notes.index', compact('notes', 'search'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
+}
     
     /**
      * Show the form for creating a new resource.
@@ -78,5 +86,27 @@ class NoteController extends Controller
            
         return redirect()->route('notes.index')
                         ->with('success', 'Note deleted successfully');
+    }
+
+    public function trash()
+    {
+    $notes = Note::onlyTrashed()->paginate(5);
+    return view('notes.trash', compact('notes'));
+    }
+
+    public function restore($id)
+    {
+    $note = Note::onlyTrashed()->findOrFail($id);
+    $note->restore();
+
+    return redirect()->route('notes.trash')->with('success', 'restore succed');
+    }
+
+    public function forceDelete($id)
+    {
+    $note = Note::onlyTrashed()->findOrFail($id);
+    $note->forceDelete();
+
+    return redirect()->route('notes.trash')->with('success', 'final deletion succed');
     }
 }
