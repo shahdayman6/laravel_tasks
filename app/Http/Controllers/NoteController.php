@@ -15,6 +15,7 @@ class NoteController extends Controller
     /**
      * Display a listing of the resource.
      */
+
    public function index(Request $request): View
 {
     $search = $request->input('search');
@@ -29,6 +30,7 @@ class NoteController extends Controller
 
     return view('notes.index', compact('notes', 'search'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
+
 }
     
     /**
@@ -43,12 +45,12 @@ class NoteController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(NoteStoreRequest $request): RedirectResponse
-    {   
-        Note::create($request->validated());
-           
-        return redirect()->route('notes.index')
-                         ->with('success', 'Note created successfully.');
-    }
+{
+    auth()->user()->notes()->create($request->validated());
+
+    return redirect()->route('notes.index')
+                     ->with('success', 'true');
+}
   
     /**
      * Display the specified resource.
@@ -70,12 +72,12 @@ class NoteController extends Controller
      * Update the specified resource in storage.
      */
     public function update(NoteUpdateRequest $request, Note $note): RedirectResponse
-    {
-        $note->update($request->validated());
-          
-        return redirect()->route('notes.index')
-                        ->with('success', 'Note updated successfully');
-    }
+{
+    $note->update($request->validated());
+
+    return redirect()->route('notes.index')
+                     ->with('success', 'Note updated successfully');
+}
   
     /**
      * Remove the specified resource from storage.
